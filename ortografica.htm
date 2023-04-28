@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ortografica</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.133.0/build/three.min.js"></script>
+    <script>
+        // Crear la escena
+const scene = new THREE.Scene();
+// Crear la cámara ortográfica y establecer su posición y dirección
+const width = window.innerWidth;
+const height = window.innerHeight;
+const aspectRatio = width / height;
+const camera = new THREE.OrthographicCamera(-2 * aspectRatio, 2 * aspectRatio, 2, -2, 1, 100);
+camera.position.set(0, 0, 5);
+
+// Crear la geometría de la pirámide
+const geometry = new THREE.BufferGeometry();
+
+const vertices = new Float32Array([
+  -1, -1, 1,
+  1, -1, 1,
+  1, -1, -1,
+  -1, -1, -1,
+  0, 1, 0,
+]);
+
+geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+const indices = new Uint16Array([
+  0, 1, 4,
+  1, 2, 4,
+  2, 3, 4,
+  3, 0, 4,
+  1, 0, 3,
+  2, 1, 3,
+]);
+
+geometry.setIndex(new THREE.BufferAttribute(indices, 1));
+
+// Crear el material y la malla de la pirámide
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true  });
+const pyramid = new THREE.Mesh(geometry, material);
+scene.add(pyramid);
+
+
+// Crear el renderer y establecer su tamaño
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(width, height);
+document.body.appendChild(renderer.domElement);
+
+// Agregar una rejilla a la escena
+const grid = new THREE.GridHelper(10, 10);
+scene.add(grid);
+
+// Renderizar la escena
+renderer.render(scene, camera);
+
+    </script>
+</body>
+</html>
